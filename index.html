@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CryptoCzar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
+        <h1>CryptoCzar</h1>
 
     </header>
 
@@ -23,7 +25,7 @@
                         <h1>Crypto<br>Converter</h1>
                         <div class="input-box">
                           <label for="amount">Enter amount</label>
-                          <input type="text" id="amount" placeholder="100" required />
+                          <input type="number" id="amount" placeholder="100" required />
                         </div>
                     </div>
             </div>
@@ -60,7 +62,7 @@
                         </div>      
                     </div>          
 
-                    <button class="convert">Convert</button>
+                    <button class="convert" class="btn btn-primary btn-lg active" >Convert</button>
                     <p class="result"></p>
                     <p class="error"></p>
                 
@@ -71,6 +73,23 @@
     </section>
 
     <section id="news-container">
+        <main>
+            <div class="cards-container container flex" id="cards-container">
+            </div>
+        </main>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <img decoding="async" src="" alt="news-image" id="news-img">
+                </div>
+                <div class="card-content">
+                    <h3 id="news-title"></h3>
+                    <h6 class="news-source" id="news-source"></h6>
+                    <p class="news-desc" id="news-desc"></p>
+                </div>
+            </div>
+
 
     </section>
     
