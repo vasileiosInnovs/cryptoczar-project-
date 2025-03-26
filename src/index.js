@@ -99,56 +99,73 @@ convertBtn.addEventListener("click", () => {
 }  */
 
 
-const API_KEY = "add4c8b134724a6d9ebd90930a86980b";
-const url = "https://newsapi.org/v2/everything?q=";
+  const API_KEY = "add4c8b134724a6d9ebd90930a86980b";
+  const url = "https://newsapi.org/v2/everything?q=";
 
-document.addEventListener("load", () => fetchCryptoNews("cryptocurrency"));
+  document.addEventListener('DOMContentLoaded', () => {
+      fetchCryptoNews("cryptocurrency");
+  });
 
-function reload() {
-    location.reload();
-} 
+  function reload() {
+      location.reload();
+  } 
 
-function fetchCryptoNews(query) {
-    fetch(`${url}${query}&apiKey=${API_KEY}`)
-        .then((response) => response.json())
-        .then((articles) => bindData(articles)) 
-    }
+  function fetchCryptoNews(query) {
+      fetch(`${url}${query}&apiKey=${API_KEY}`)
+          .then((response) => {
+              if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+          })
+          .then((data) => bindData(data.articles))
+          .catch((error) => {
+              console.error("Error fetching news:", error);
+              const cardsContainer = document.getElementById("cards-container");
+              cardsContainer.innerHTML = "<p>Failed to load news. Please try again later.</p>";
+          });
+  }
 
-function bindData(articles) {
-    const cardsContainer = document.getElementById("cards-container");
-    const newsCardTemplate = document.getElementById("template-news-card");
+  function bindData(articles) {
+      const cardsContainer = document.getElementById("cards-container");
+      const newsCardTemplate = document.getElementById("template-news-card");
 
-    cardsContainer.innerHTML = "";
+      cardsContainer.innerHTML = "";
 
-    articles.forEach((article) => {
-        if (!article.urlToImage) return;
-        const cardClone = newsCardTemplate.content.cloneNode(true);
-        fillDataInCard(cardClone, article);
-        cardsContainer.appendChild(cardClone);
-    });
-}
+      if (!articles || !Array.isArray(articles)) {
+          console.error("No articles found or invalid data format");
+          cardsContainer.innerHTML = "<p>No news found. Please try again later.</p>";
+          return;
+      }
 
-function fillDataInCard(cardClone, article) {
-    const newsImg = cardClone.querySelector("#news-img");
-    const newsTitle = cardClone.querySelector("#news-title");
-    const newsSource = cardClone.querySelector("#news-source");
-    const newsDesc = cardClone.querySelector("#news-desc");
+      articles.forEach((article) => {
+          if (!article.urlToImage) return;
+          const cardClone = newsCardTemplate.content.cloneNode(true);
+          fillDataInCard(cardClone, article);
+          cardsContainer.appendChild(cardClone);
+      });
+  }
 
-    newsImg.src = article.urlToImage;
-    newsTitle.textContent = article.title;
-    newsDesc.textContent = article.description;
+  function fillDataInCard(cardClone, article) {
+      const newsImg = cardClone.querySelector("#news-img");
+      const newsTitle = cardClone.querySelector("#news-title");
+      const newsSource = cardClone.querySelector("#news-source");
+      const newsDesc = cardClone.querySelector("#news-desc");
 
-    const date = new Date(article.publishedAt).toLocaleString("en-US", {
-        timeZone: "Europe/Moscow",
-    });
+      newsImg.src = article.urlToImage;
+      newsImg.alt = article.title || "News image";
+      newsTitle.textContent = article.title;
+      newsDesc.textContent = article.description || "No description available";
 
-    newsSource.textContent = `${article.source.name} · ${date}`;
+      const date = new Date(article.publishedAt).toLocaleString("en-US", {
+          timeZone: "Europe/Moscow",
+      });
 
-    cardClone.firstElementChild.addEventListener("click", () => {
-        window.open(article.url, "_blank");
-    });
-}
+      newsSource.textContent = `${article.source?.name || "Unknown source"} · ${date}`;
 
-document.addEventListener('DOMContentLoaded', function () {
-    fetchCryptoNews;
-}); */
+      cardClone.firstElementChild.addEventListener("click", () => {
+          if (article.url) {
+              window.open(article.url, "_blank");
+          }
+      });
+  }

@@ -5,3 +5,56 @@ header {
     padding: 10px;
     background-color: rgba(255, 255, 0, 0.823);
 }
+
+#table-container {
+
+}
+
+button {
+
+}
+
+.container { 
+    width: 100%; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 20px; 
+}
+
+.flex { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 20px; 
+}
+
+.card { 
+    width: 300px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    cursor: pointer; 
+    transition: transform 0.3s; 
+}
+.card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+}
+.card-header img { 
+    width: 100%; 
+    height: 150px; 
+    object-fit: cover; 
+}
+
+.card-content { 
+    padding: 15px; 
+}
+
+.news-source { 
+    color: #666; 
+    margin: 10px 0; 
+    font-size: 0.8rem; 
+}
+
+.news-desc { 
+    font-size: 0.9rem; 
+}
