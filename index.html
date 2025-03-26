@@ -13,29 +13,29 @@
 
     </header>
 
-    <section id="table-container">
+    <div class="container-fluid">
         <div id="crypocurrency-table">
             <table class="table table-borderless table-hover table-sm">
                 <thead>
-                <tr id="coin-titles">
-                    <th scope="col">Market Cap Rank</th>
-                    <th scope="col">Coin</th>
-                    <th scope="col">Current Price</th>
-                    <th scope="col">Market Cap</th>
-                    <th scope="col">Valuation</th>
-                    <th scope="col">24 hr ⇵</th>
-                    <th scope="col">Total Supply</th>
-                    <th scope="col">Max Supply</th>
-                </tr>
+                    <tr id="coin-titles">
+                        <th scope="col">Rank</th>
+                        <th scope="col">Coin</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Market Cap</th>
+                        <th scope="col">Valuation</th>
+                        <th scope="col">24h ⇵</th>
+                        <th scope="col">Total Supply</th>
+                        <th scope="col">Max Supply</th>
+                    </tr>
                 </thead>
-                <tbody>
-                    <tr id="coin-list" class="list-group-item list-group-item-action active"></tr>
-                    <th scope="row"> </th>
-                    <td></td>
+                <tbody id="coin-list">
+                    <tr class="loading">
+                        <td colspan="8">Loading cryptocurrency data...</td>
+                    </tr>
                 </tbody>    
             </table>
         </div>
-
+    </div>
     </section>
 
     <section id="calculator-container"> 

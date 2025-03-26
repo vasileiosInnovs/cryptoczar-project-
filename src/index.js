@@ -1,102 +1,224 @@
 
 
-
-
-/* let input = document.getElementById("amount"); */
-
-/* let apiKey = 'CG-Xh4DDgZTeeRMYxbwe7yUfa5T'; */
-
-/* let fromCryptoCurrency = document.getElementById("fromCrypto");
-let toCurrency = document.getElementById("toCurrency");
-
-function createOption(currency, defaultCode, element) {
-  const option = document.createElement("option");
-  option.classList.add("select-option");
-  option.value = currency.name;
-  if (currency.name === defaultCode) {
-    option.selected = true;
-  }
-  option.text = ` ${currency.unit} - ${currency.name}`;
-  element.appendChild(option);
-}
-
-function addCurrency() {
-    const fromCryptoCurrency = document.getElementById("fromCrypto");
-    const toCurrency = document.getElementById("toCurrency")
-
-    const result = currencies.forEach((currency) => {
-    const optionFrom = document.createElement("option");
-    optionFrom.classList.add("select-option");
-    optionFrom.value = currency.name;
-    if (currency.type === "crypto") {
-      optionFrom.selected = true;
-    }
-    optionFrom.text = `${currency.unit} - ${currency.name}`;
-
-    fromCurrency.appendChild(optionFrom);
-
-    const optionTO = document.createElement("option");
-    optionTO.classList.add("select-option");
-    optionTO.value = currency.name;
-    if (currency.type === "fiat") {
-      optionTO.selected = true;
-    }
-    optionTO.text = `${currency.unit} - ${currency.name}`;
-    toCurrency.appendChild(optionTO);
-  });
-} */
-/* addCurrency();
-
-const convertBtn = document.querySelector(".convert");
-convertBtn.addEventListener("click", () => {
-  convertCurrency();
-});
- */
-/* function convertCurrency() {
-  const fromCurrrencyCode = document.getElementById("fromCrypto").value;
-  const toCurrencyCode = document.getElementById("toCurrency").value;
-  const result = document.querySelector(".result");
-  const error = document.querySelector(".error"); */
-
-  /* console.log(fromCurrrencyCode);
-  console.log(toCurrencyCode); */
-
-  /* const amount = input.value;
-
-  if (amount !== "" && parseFloat(amount) >= 1) {
-    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${fromCurrrencyCode}&vs_currencies=${toCurrencyCode}`;
-    const options = {
-        method: 'GET',
-        headers: {accept: 'application/json', 'x-cg-demo-api-key': 'CG-Xh4DDgZTeeRMYxbwe7yUfa5T'}
-    };
-
-    fetch(url, options)
-        .then(res => res.json())
-        .then(data => {
-            if (data[fromCurrrencyCode] && data[fromCurrrencyCode][toCurrencyCode]){
-                const conversionRate = data[fromCurrrencyCode][toCurrencyCode]
-            }
-        })
-
-  .      catch(err => console.error(err));
-    
-
-     const conversionResult = (amount * data.conversion_rate).toFixed(2);
-        const formattedResult = conversionResult.replace(
-          /\B(?=(\d{3})+(?!\d))/g,
-          ","
-        );
-
-        result.innerHTML = `${amount} ${fromCurrrencyCode} = ${formattedResult} ${toCurrencyCode}`;
-        amount.innerHTML = " ";
-      }
-      .catch(() => {
-        error.textContent = "An error occured, please try again later ";
+document.addEventListener('DOMContentLoaded', function() {
+  const coinList = document.getElementById('coin-list');
+  const vsCurrency = 'usd';
+  I
+  fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${vsCurrency}&order=market_cap_desc&per_page=50&page=1&sparkline=false`)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          coinList.innerHTML = '';
+          
+          data.forEach(coin => {
+              const row = document.createElement('tr');
+              row.className = 'list-group-item list-group-item-action';
+              
+              const price = formatCurrency(coin.current_price);
+              const marketCap = formatCurrency(coin.market_cap);
+              const totalSupply = coin.total_supply ? formatNumber(coin.total_supply) : 'N/A';
+              const maxSupply = coin.max_supply ? formatNumber(coin.max_supply) : 'N/A';
+              const priceChangeClass = coin.price_change_percentage_24h >= 0 ? 'positive' : 'negative';
+              const priceChange = coin.price_change_percentage_24h ? 
+                  `${coin.price_change_percentage_24h.toFixed(2)}%` : 'N/A';
+              
+              const fullyDilutedValuation = coin.fully_diluted_valuation ? 
+                  formatCurrency(coin.fully_diluted_valuation) : 'N/A';
+              
+              row.innerHTML = `
+                  <th scope="row">${coin.market_cap_rank}</th>
+                  <td>
+                      <div class="d-flex align-items-center">
+                          <img src="${coin.image}" alt="${coin.name}" class="coin-logo">
+                          <span class="fw-bold">${coin.symbol.toUpperCase()}</span>
+                      </div>
+                  </td>
+                  <td>${price}</td>
+                  <td>${marketCap}</td>
+                  <td>${fullyDilutedValuation}</td>
+                  <td class="${priceChangeClass}">${priceChange}</td>
+                  <td>${totalSupply}</td>
+                  <td>${maxSupply}</td>
+              `;
+              
+              coinList.appendChild(row);
+          });
+      })
+      .catch(error => {
+          console.error('Error fetching data:', error);
+          coinList.innerHTML = `
+              <tr class="text-danger">
+                  <td colspan="8">Failed to load data. Please try again later.</td>
+              </tr>
+          `;
       });
-  } else {
-    alert("Please enter an amount");
+
+  function formatCurrency(value) {
+      return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: vsCurrency,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: value < 1 ? 6 : 2
+      }).format(value);
   }
-}  */
+
+  function formatNumber(value) {
+      return new Intl.NumberFormat('en-US', {
+          maximumFractionDigits: 0
+      }).format(value);
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const amountInput = document.getElementById("amount");
+  const fromCrypto = document.getElementById("fromCrypto");
+  const toCurrency = document.getElementById("toCurrency");
+  const resultDisplay = document.querySelector(".result");
+  const errorDisplay = document.querySelector(".error");
+  const convertBtn = document.querySelector(".convert");
+  const loadingElement = document.getElementById("loading");
+
+  initConverter();
+
+  function initConverter() {
+      fetch('https://api.coingecko.com/api/v3/simple/supported_vs_currencies')
+          .then(function(response) {
+              if (!response.ok) {
+                  throw new Error('Failed to fetch supported currencies');
+              }
+              return response.json();
+          })
+          .then(function(vsCurrencies) {
+              return fetch('https://api.coingecko.com/api/v3/exchange_rates')
+                  .then(function(response) {
+                      if (!response.ok) {
+                          throw new Error('Failed to fetch exchange rates');
+                      }
+                      return response.json();
+                  })
+                  .then(function(data) {
+                      return {
+                          vsCurrencies: vsCurrencies,
+                          rates: data.rates
+                      };
+                  });
+          })
+          .then(function(data) {
+              populateCurrencyDropdowns(data.rates, data.vsCurrencies);
+              
+              convertBtn.disabled = false;
+              loadingElement.style.display = 'none';
+              
+              convertBtn.addEventListener("click", convertCurrency);
+          })
+          .catch(function(error) {
+              console.error("Initialization error:", error);
+              errorDisplay.textContent = "Failed to load currency data. Please refresh the page.";
+              loadingElement.textContent = "Failed to load data";
+          });
+  }
+
+  function populateCurrencyDropdowns(rates, vsCurrencies) {
+      fromCrypto.innerHTML = '';
+      toCurrency.innerHTML = '';
+      
+      const cryptoOptions = Object.entries(rates)
+          .filter(function([_, rate]) {
+              return rate.type === 'crypto';
+          })
+          .sort(function(a, b) {
+              return a[1].name.localeCompare(b[1].name);
+          });
+      
+      cryptoOptions.forEach(function([key, rate]) {
+          const option = document.createElement('option');
+          option.value = key;
+          option.textContent = rate.name + ' (' + key.toUpperCase() + ')';
+          fromCrypto.appendChild(option);
+      });
+      
+      vsCurrencies.sort().forEach(function(currency) {
+          const option = document.createElement('option');
+          option.value = currency;
+          y
+          try {
+              const currencyName = new Intl.DisplayNames(['en'], {type: 'currency'}).of(currency);
+              option.textContent = currencyName ? currencyName + ' (' + currency.toUpperCase() + ')' : currency.toUpperCase();
+          } catch (e) {
+              option.textContent = currency.toUpperCase();
+          }
+          
+          toCurrency.appendChild(option);
+      });
+      
+      fromCrypto.value = 'btc';
+      toCurrency.value = 'usd';
+  }
+
+  function convertCurrency() {
+      const amount = parseFloat(amountInput.value);
+      const fromCurrencyId = fromCrypto.value;
+      const toCurrencyCode = toCurrency.value;
+     
+      resultDisplay.textContent = '';
+      errorDisplay.textContent = '';
+      
+      if (isNaN(amount)) {
+          errorDisplay.textContent = "Please enter a valid amount";
+          return;
+      }
+      
+      if (amount <= 0) {
+          errorDisplay.textContent = "Amount must be greater than 0";
+          return;
+      }
+      
+      fetch('https://api.coingecko.com/api/v3/exchange_rates')
+          .then(function(response) {
+              if (!response.ok) {
+                  throw new Error('Failed to fetch exchange rates');
+              }
+              return response.json();
+          })
+          .then(function(data) {
+              const rates = data.rates;
+              s
+              if (!rates[fromCurrencyId] || !rates[toCurrencyCode]) {
+                  throw new Error("Selected currencies not available");
+              }
+              
+              const fromRate = rates[fromCurrencyId].value;
+              const toRate = rates[toCurrencyCode].value;
+              
+          
+              const btcAmount = amount / fromRate;
+              const convertedAmount = btcAmount * toRate;
+              
+              const formattedAmount = new Intl.NumberFormat('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 8
+              }).format(amount);
+              
+              const formattedResult = new Intl.NumberFormat('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 8
+              }).format(convertedAmount);
+              
+              const fromName = fromCrypto.options[fromCrypto.selectedIndex].text;
+              const toName = toCurrency.options[toCurrency.selectedIndex].text;
+              
+              resultDisplay.textContent = formattedAmount + ' ' + fromName + ' = ' + formattedResult + ' ' + toName;
+          })
+          .catch(function(error) {
+              console.error("Conversion error:", error);
+              errorDisplay.textContent = "An error occurred during conversion. Please try again.";
+          });
+  }
+});
 
 
   const API_KEY = "add4c8b134724a6d9ebd90930a86980b";
