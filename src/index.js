@@ -38,23 +38,16 @@ fetchCryptoData();
 setInterval(fetchCryptoData, 30000);
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
+    // Use the same IDs from the HTML
     const amountInput = document.getElementById("amount");
     const fromCrypto = document.getElementById("fromCrypto");
     const toCurrency = document.getElementById("toCurrency");
-    const resultDisplay = document.getElementById("output");
-    const errorDisplay = document.getElementById("error-message");
-    const convertBtn = document.querySelector(".convert");
-    const postButton = document.getElementById("postButton");
-    const userInput = document.getElementById("userInput");
-    const apiOutput = document.getElementById("apiOutput");
-    const resultList = document.getElementById("resultList");
-  
-    const apiKey = "your-api-key-here";
-    const apiUrl = "your-api-endpoint-here";
+    const convertBtn = document.getElementById("convert-currency");
+    const resultDisplay = document.querySelector("#output output"); // Keeping output inside span
 
     initConverter();
-    setupPostButton();
+
     function initConverter() {
         fetch('https://api.coingecko.com/api/v3/simple/supported_vs_currencies')
             .then(response => response.json())
@@ -73,16 +66,17 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error("Initialization error:", error);
-                errorDisplay.textContent = "Failed to load currency data. Please refresh the page.";
+                resultDisplay.textContent = "Failed to load currency data. Please refresh the page.";
             });
     }
 
     function populateCurrencyDropdowns(rates, vsCurrencies) {
-        fromCrypto.innerHTML = '';
-        toCurrency.innerHTML = '';
+        fromCrypto.innerHTML = '<option value="">Cryptocurrency</option>';
+        toCurrency.innerHTML = '<option value="">Currency</option>';
 
+        // Populate crypto dropdown
         Object.entries(rates)
-            .filter(([_, rate]) => rate.type === 'crypto')
+            .filter(([_, rate]) => rate?.type === 'crypto')
             .sort((a, b) => a[1].name.localeCompare(b[1].name))
             .forEach(([key, rate]) => {
                 const option = document.createElement('option');
@@ -91,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 fromCrypto.appendChild(option);
             });
 
+        // Populate fiat currency dropdown
         vsCurrencies.sort().forEach(currency => {
             const option = document.createElement('option');
             option.value = currency;
@@ -104,9 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             toCurrency.appendChild(option);
         });
-
-        fromCrypto.value = 'btc';
-        toCurrency.value = 'usd';
     }
 
     function convertCurrency() {
@@ -115,10 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const toCurrencyCode = toCurrency.value;
 
         resultDisplay.textContent = '';
-        errorDisplay.textContent = '';
+
+        if (!fromCurrencyId || !toCurrencyCode) {
+            resultDisplay.textContent = "Please select both a cryptocurrency and a currency.";
+            return;
+        }
 
         if (isNaN(amount) || amount <= 0) {
-            errorDisplay.textContent = "Please enter a valid amount greater than 0";
+            resultDisplay.textContent = "Please enter a valid amount greater than 0.";
             return;
         }
 
@@ -131,8 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     throw new Error("Selected currencies not available");
                 }
 
-                const fromRate = rates[fromCurrencyId].value;
-                const toRate = rates[toCurrencyCode].value;
+                const fromRate = rates[fromCurrencyId]?.value || 1;
+                const toRate = rates[toCurrencyCode]?.value || 1;
 
                 const btcAmount = amount / fromRate;
                 const convertedAmount = btcAmount * toRate;
@@ -147,53 +143,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     maximumFractionDigits: 8
                 }).format(convertedAmount);
 
-                const fromName = fromCrypto.options[fromCrypto.selectedIndex].text;
-                const toName = toCurrency.options[toCurrency.selectedIndex].text;
-
-                resultDisplay.textContent = `${formattedAmount} ${fromName} = ${formattedResult} ${toName}`;
+                resultDisplay.textContent = `${formattedAmount} ${fromCrypto.options[fromCrypto.selectedIndex].text} = ${formattedResult} ${toCurrency.options[toCurrency.selectedIndex].text}`;
             })
             .catch(error => {
                 console.error("Conversion error:", error);
-                errorDisplay.textContent = "An error occurred during conversion. Please try again.";
+                resultDisplay.textContent = "An error occurred during conversion. Please try again.";
             });
-    }
-    function setupPostButton() {
-        postButton.addEventListener("click", function() {
-            const userText = userInput.value;
-            
-            if (!userText.trim()) {
-                apiOutput.textContent = "Please enter some text";
-                return;
-            }
-
-            fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({ input: userText })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Display the API response
-                apiOutput.textContent = "Response: " + JSON.stringify(data);
-                
-                // Append the posted data to a list on the page
-                const listItem = document.createElement("li");
-                listItem.textContent = `${userText}`;
-                resultList.appendChild(listItem);
-                
-                // Clear the input field
-                userInput.value = "";
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                apiOutput.textContent = "Error occurred while posting data";
-            });
-        });
     }
 });
+
 
 
 const API_KEY = "add4c8b134724a6d9ebd90930a86980b";
