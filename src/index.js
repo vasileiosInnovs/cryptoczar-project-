@@ -1,77 +1,42 @@
 
 
-document.addEventListener('DOMContentLoaded', function() {
-  const coinList = document.getElementById('coin-list');
-  const vsCurrency = 'usd';
-  I
-  fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=${vsCurrency}&order=market_cap_desc&per_page=50&page=1&sparkline=false`)
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.json();
-      })
-      .then(data => {
-          coinList.innerHTML = '';
-          
-          data.forEach(coin => {
-              const row = document.createElement('tr');
-              row.className = 'list-group-item list-group-item-action';
-              
-              const price = formatCurrency(coin.current_price);
-              const marketCap = formatCurrency(coin.market_cap);
-              const totalSupply = coin.total_supply ? formatNumber(coin.total_supply) : 'N/A';
-              const maxSupply = coin.max_supply ? formatNumber(coin.max_supply) : 'N/A';
-              const priceChangeClass = coin.price_change_percentage_24h >= 0 ? 'positive' : 'negative';
-              const priceChange = coin.price_change_percentage_24h ? 
-                  `${coin.price_change_percentage_24h.toFixed(2)}%` : 'N/A';
-              
-              const fullyDilutedValuation = coin.fully_diluted_valuation ? 
-                  formatCurrency(coin.fully_diluted_valuation) : 'N/A';
-              
-              row.innerHTML = `
-                  <th scope="row">${coin.market_cap_rank}</th>
-                  <td>
-                      <div class="d-flex align-items-center">
-                          <img src="${coin.image}" alt="${coin.name}" class="coin-logo">
-                          <span class="fw-bold">${coin.symbol.toUpperCase()}</span>
-                      </div>
-                  </td>
-                  <td>${price}</td>
-                  <td>${marketCap}</td>
-                  <td>${fullyDilutedValuation}</td>
-                  <td class="${priceChangeClass}">${priceChange}</td>
-                  <td>${totalSupply}</td>
-                  <td>${maxSupply}</td>
-              `;
-              
-              coinList.appendChild(row);
-          });
-      })
-      .catch(error => {
-          console.error('Error fetching data:', error);
-          coinList.innerHTML = `
-              <tr class="text-danger">
-                  <td colspan="8">Failed to load data. Please try again later.</td>
-              </tr>
-          `;
-      });
+function fetchCryptoData() {
+    const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h&locale=en";
+    
+    fetch(url)
+        .then(response => response.json()) // Convert response to JSON
+        .then(data => {
+            const tableBody = document.getElementById("cryptoTableBody");
+            tableBody.innerHTML = ""; // Clear existing table content
 
-  function formatCurrency(value) {
-      return new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: vsCurrency,
-          minimumFractionDigits: 2,
-          maximumFractionDigits: value < 1 ? 6 : 2
-      }).format(value);
-  }
+            data.forEach(coin => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${coin.market_cap_rank}</td>
+                    <td>
+                        <img src="${coin.image}" alt="${coin.name}"> ${coin.name} (${coin.symbol.toUpperCase()})
+                    </td>
+                    <td>$${coin.current_price.toLocaleString()}</td>
+                    <td>$${coin.market_cap.toLocaleString()}</td>
+                    <td>$${(coin.fully_diluted_valuation || "N/A").toLocaleString()}</td>
+                    <td>$${coin.high_24h.toLocaleString()}</td>
+                    <td>$${coin.low_24h.toLocaleString()}</td>
+                    <td>${coin.total_supply ? coin.total_supply.toLocaleString() : "N/A"}</td>
+                    <td>${coin.max_supply ? coin.max_supply.toLocaleString() : "N/A"}</td>
+                `;
 
-  function formatNumber(value) {
-      return new Intl.NumberFormat('en-US', {
-          maximumFractionDigits: 0
-      }).format(value);
-  }
-});
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching cryptocurrency data:", error);
+        });
+}
+
+// Fetch data every 30 seconds
+fetchCryptoData();
+setInterval(fetchCryptoData, 30000);
+
 
 document.addEventListener('DOMContentLoaded', function() {
   const amountInput = document.getElementById("amount");

@@ -14,36 +14,33 @@
     </header>
 
     <div class="container-fluid">
-        <div id="crypocurrency-table">
-            <table class="table table-borderless table-hover table-sm">
-                <thead>
-                    <tr id="coin-titles">
-                        <th scope="col">Rank</th>
-                        <th scope="col">Coin</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Market Cap</th>
-                        <th scope="col">Valuation</th>
-                        <th scope="col">24h ⇵</th>
-                        <th scope="col">Total Supply</th>
-                        <th scope="col">Max Supply</th>
-                    </tr>
-                </thead>
-                <tbody id="coin-list">
-                    <tr class="loading">
-                        <td colspan="8">Loading cryptocurrency data...</td>
-                    </tr>
-                </tbody>    
-            </table>
-        </div>
-    </div>
+        <h1>Live Cryptocurrency Prices</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Coin</th>
+                    <th>Price (USD)</th>
+                    <th>Market Cap</th>
+                    <th>Valuation</th>
+                    <th>24h High</th>
+                    <th>24h Low</th>
+                    <th>Total Supply</th>
+                    <th>Max Supply</th>
+                </tr>
+            </thead>
+            <tbody id="cryptoTableBody">
+                <!-- Data will be inserted here dynamically -->
+            </tbody>
+        </table>
     </section>
 
     <section id="calculator-container"> 
         <div class="container">      
             <div class="main">
                 <div class="currency-container">
+                    <h1>Crypto<br>Converter</h1>
                     <div class="form-group">
-                        <h1>Crypto<br>Converter</h1>
                         <div class="input-box">
                             <label for="amount">Enter amount</label>
                             <input type="number" id="amount" placeholder="1" min="0.00000001" step="any" required />
@@ -52,25 +49,24 @@
                 </div>
                 
                 <div class="currency">
-                    <div class="row">
                         <div class="col-sm-6">
-                            <div class="input-group mb-3">
+                            <div>
                                 <div class="input-group-prepend">  
-                                    <div class="box">
+                                    <div id="crypto-box">
                                         <select class="select-option" name="from-crypto-currency" id="fromCrypto">
                                             <option value="">Cryptocurrency</option>
                                         </select>
                                     </div>
                                 </div>
                             </div> 
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="input-group mb-3">  
-                                <div class="input-group-prepend">   
+                        </div>   
                                     <div>
                                         <span>TO</span>
                                     </div>
-                                    <div class="box">
+                        <div class="col-sm-6">
+                            <div>  
+                                <div class="input-group-prepend">
+                                    <div id="fiat-box">
                                         <select class="select-option" name="to-currency" id="toCurrency">
                                             <option value="">Currency</option>
                                         </select>
@@ -78,7 +74,7 @@
                                 </div>
                             </div> 
                         </div> 
-                    </div>      
+                          
                 </div>          
     
                 <button class="convert" disabled>Convert</button>
@@ -91,6 +87,7 @@
 
        
     <section id="news-container">
+        <h1>Crypto News</h1>
         <template id="template-news-card">
             <div class="card">
                 <div class="card-header">

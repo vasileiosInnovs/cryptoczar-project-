@@ -6,12 +6,82 @@ header {
     background-color: rgba(255, 255, 0, 0.823);
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
+    color: white;
+}
+
+img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
 #table-container {
 
 }
 
-button {
+#calculator-container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 
+div.main {
+    
+}
+
+.input-box {
+    display: flex;
+    justify-content: center;
+}
+
+div input::before {
+    content: "";
+    margin: 10px;
+}
+
+div.currency {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+div#fiat-box {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+div#crypto-box {
+    padding-top: 29px;
+    padding-bottom: 20px;
+}
+
+button {
+    padding: 15px 30px;
+    border-radius: 6px;
+    background-color: rgb(9, 168, 9);
+    color: white;
+    font-weight: bold;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:active {
+    background-color: green;
 }
 
 .container { 
