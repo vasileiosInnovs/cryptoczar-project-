@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 node_modules/
 .env
+=======
+node_modules
+>>>>>>> ad3a2c5 (Augment initialized server.js)
