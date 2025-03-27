@@ -38,8 +38,15 @@ img {
     padding-bottom: 20px;
 }
 
-div.main {
-    
+div.container {
+    justify-content: center;
+}
+
+.container p {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    padding: 20px 10px 10px 10px;
 }
 
 .input-box {
@@ -55,7 +62,7 @@ div input::before {
 div.currency {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 div#fiat-box {
@@ -69,7 +76,7 @@ div#crypto-box {
 }
 
 button {
-    padding: 15px 30px;
+    padding: 15px 130px;
     border-radius: 6px;
     background-color: rgb(9, 168, 9);
     color: white;
@@ -84,11 +91,16 @@ button:active {
     background-color: green;
 }
 
+span output {
+    color: rgb(13, 147, 13);
+}
+
 .container { 
     width: 100%; 
-    max-width: 1200px; 
+    max-width: 2000px; 
     margin: 0 auto; 
     padding: 20px; 
+    justify-content: space-between;
 }
 
 .flex { 
@@ -98,7 +110,7 @@ button:active {
 }
 
 .card { 
-    width: 300px; 
+    width: 250px; 
     border: 1px solid #ddd; 
     border-radius: 8px; 
     overflow: hidden; 
