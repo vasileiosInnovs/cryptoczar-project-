@@ -1,6 +1,6 @@
 body {
-    background-color: #121212; 
-    color: #e0e0e0;
+    background-color:  #ec6816;
+    color: white;
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
@@ -8,27 +8,36 @@ body {
 
 header {
     padding: 10px;
-    background-color: rgba(255, 255, 0, 0.823);
+    background-color: black;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+    color: #fff;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* crypto table container */
+.container-fluid {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: black;
+    border-radius: 5px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
+    background: #222;
+    color: white;
 }
 
 thead {
     background-color: orange;
-    color: white;
-}
-
-th {
-    background-color: #333;
     color: white;
 }
 
@@ -39,21 +48,43 @@ img {
     margin-right: 8px;
 }
 
-.container-fluid {
-    padding: 20px;
-    background-color:rgb(239, 200, 127);
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
 }
 
+th {
+    background-color: #333;
+    color: white;
+}
+
+div p > a {
+    color: rgb(38, 202, 38);
+}
+
+/* crypto calculator container */
 #calculator-container {
+    background: black;
+    color: white;
     padding-top: 20px;
     padding-bottom: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.currency-container {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 div.container {
     justify-content: center;
 }
 
-.container p {
+.container p.text-success {
     display: flex;
     justify-content: center;
     font-weight: bold;
@@ -65,6 +96,14 @@ div.container {
     justify-content: center;
 }
 
+.input-box input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+
 div input::before {
     content: "";
     margin: 10px;
@@ -72,49 +111,50 @@ div input::before {
 
 div.currency {
     display: flex;
-    flex-direction: row;
     justify-content: space-around;
+    align-items: center;
+    gap: 15px;
 }
 
-div#fiat-box {
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-div#crypto-box {
-    padding-top: 29px;
-    padding-bottom: 20px;
+.select-option {
+    width: 150px;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
 }
 
 button {
-    padding: 15px 130px;
-    border-radius: 6px;
-    background-color: rgb(9, 168, 9);
-    color: white;
+    background: #ffab00;
+    color: #000;
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-size: 16px;
     font-weight: bold;
-}
-
-button:hover {
+    border: none;
     cursor: pointer;
 }
 
-button:active {
-    background-color: green;
+button:hover {
+    background: #ff9100;
 }
 
 span output {
     display: flex;
-    color: rgb(13, 147, 13);
+    color: #66ff00;
     justify-content: center;
     font-size: 30px;
 }
 
-.container { 
+/* news section */
+#news-container { 
     width: 100%; 
     max-width: 2000px; 
     margin: 0 auto; 
     padding: 20px; 
     justify-content: space-between;
+    margin-top: 50px;
+    background-color: black;
 }
 
 .flex { 
@@ -154,4 +194,3 @@ span output {
 .news-desc { 
     font-size: 0.9rem; 
 }
-
