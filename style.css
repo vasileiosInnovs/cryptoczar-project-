@@ -155,6 +155,7 @@ span output {
     justify-content: space-between;
     margin-top: 50px;
     background-color: black;
+    text-align: center;
 }
 
 .flex { 
@@ -164,6 +165,8 @@ span output {
 }
 
 .card { 
+    background: #212121;
+    color: white;
     width: 250px; 
     border: 1px solid #ddd; 
     border-radius: 8px; 
@@ -172,25 +175,32 @@ span output {
     transition: transform 0.3s; 
 }
 .card:hover { 
-    transform: translateY(-5px); 
+    transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
 }
-.card-header img { 
+.card-header img {
+    border-radius: 8px; 
     width: 100%; 
     height: 150px; 
     object-fit: cover; 
 }
 
 .card-content { 
-    padding: 15px; 
+    padding: 10px; 
 }
 
 .news-source { 
-    color: #666; 
+    color: #ffab00;
     margin: 10px 0; 
-    font-size: 0.8rem; 
+    font-size: bold; 
 }
 
 .news-desc { 
     font-size: 0.9rem; 
+}
+
+@media (max-width: 768px) {
+    .currency {
+        flex-direction: column;
+    }
 }
