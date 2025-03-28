@@ -7,6 +7,8 @@ body {
 }
 
 header {
+    display: flex;
+    justify-content: space-between;
     padding: 10px;
     background-color: black;
     color: white;
@@ -14,11 +16,25 @@ header {
 }
 
 header h1 {
-    color: #fff;
-    text-align: center;
+    color:  #D3AF37;
+    /* text-align: center; */
     font-size: 2rem;
     font-weight: bold;
 }
+
+ul {
+    list-style-type: none;
+    display: flex;
+    padding-top: 10px;
+    padding-right: 50px;
+    gap: 35px;
+  }
+
+a {
+    text-decoration: none;
+    color: white;
+}
+  
 
 /* crypto table container */
 .container-fluid {
@@ -78,6 +94,10 @@ div p > a {
 .currency-container {
     text-align: center;
     margin-bottom: 20px;
+}
+
+.container {
+    margin: 0;
 }
 
 div.container {
