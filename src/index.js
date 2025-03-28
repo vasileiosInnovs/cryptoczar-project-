@@ -33,18 +33,16 @@ function fetchCryptoData() {
         });
 }
 
-// Fetch data every 30 seconds
 fetchCryptoData();
 setInterval(fetchCryptoData, 30000);
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Use the same IDs from the HTML
     const amountInput = document.getElementById("amount");
     const fromCrypto = document.getElementById("fromCrypto");
     const toCurrency = document.getElementById("toCurrency");
     const convertBtn = document.getElementById("convert-currency");
-    const resultDisplay = document.querySelector("#output output"); // Keeping output inside span
+    const resultDisplay = document.querySelector("#output output"); 
 
     initConverter();
 
@@ -74,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
         fromCrypto.innerHTML = '<option value="">Cryptocurrency</option>';
         toCurrency.innerHTML = '<option value="">Currency</option>';
 
-        // Populate crypto dropdown
         Object.entries(rates)
             .filter(([_, rate]) => rate?.type === 'crypto')
             .sort((a, b) => a[1].name.localeCompare(b[1].name))
@@ -85,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 fromCrypto.appendChild(option);
             });
 
-        // Populate fiat currency dropdown
+
         vsCurrencies.sort().forEach(currency => {
             const option = document.createElement('option');
             option.value = currency;
@@ -154,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-const API_KEY = "add4c8b134724a6d9ebd90930a86980b";
+/* const API_KEY = "add4c8b134724a6d9ebd90930a86980b"; */
 const url = "https://newsapi.org/v2/everything?q=";
 const query = "bitcoin%20OR%20ethereum%20OR%20dogecoin%20OR%20solana%20OR%20tetherOR%20cryptocurrency&pageSize=10";
 
@@ -166,7 +163,7 @@ function reload() {
     location.reload();
 } 
 function fetchCryptoNews(query) {
-    fetch(`${url}${query}&apiKey=${API_KEY}`)
+    fetch(`${url}${query}&apiKey=add4c8b134724a6d9ebd90930a86980b`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
