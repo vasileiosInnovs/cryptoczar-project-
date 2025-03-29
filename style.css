@@ -1,7 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Orbitron&family=Share+Tech&family=Tektur:wght@400..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Orbitron&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Share+Tech&family=Teko:wght@300..700&family=Tektur:wght@400..900&display=swap');
+
+
+
 body {
     background-color:  #ec6816;
     color: white;
-    font-family: 'Arial', sans-serif;
+    font-family: "Tektur", sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -10,13 +16,16 @@ header {
     display: flex;
     justify-content: space-between;
     padding: 10px;
+    padding-bottom: 70px;
     background-color: black;
     color: white;
+    background-image: linear-gradient(#ffab00, white);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* border: 1px solid #D3AF37; */
 }
 
 header h1 {
-    color:  #D3AF37;
+    color:  white;
     /* text-align: center; */
     font-size: 2rem;
     font-weight: bold;
@@ -34,15 +43,21 @@ a {
     text-decoration: none;
     color: white;
 }
+
+a:hover {
+    color: black;
+}
   
 
 /* crypto table container */
 .container-fluid {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: black;
+    padding-top: 120px;
+    padding-bottom: 70px;
+    background-color: white;
+    color: black;
     border-radius: 5px;
+    border: 1px solid #D3AF37;
+    border-top: none;
 }
 
 table {
@@ -50,6 +65,8 @@ table {
     border-collapse: collapse;
     background: #222;
     color: white;
+    font-family: "Teko", sans-serif;
+    font-size: 20px;
 }
 
 thead {
@@ -83,12 +100,11 @@ div p > a {
 #calculator-container {
     background: black;
     color: white;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    padding-top: 70px;
+    padding-bottom: 70px;
     border-radius: 5px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid #D3AF37;
 }
 
 .currency-container {
@@ -119,9 +135,10 @@ div.container {
 .input-box input {
     width: 100%;
     padding: 10px;
-    border-radius: 5px;
-    border: none;
+    border: 1px solid white;
     font-size: 16px;
+    background-color: #000;
+    color: white;
 }
 
 div input::before {
@@ -137,26 +154,31 @@ div.currency {
 }
 
 .select-option {
-    width: 150px;
+    width: 180px;
     padding: 8px;
     border-radius: 5px;
-    border: none;
+    border: 1px solid white;
     font-size: 16px;
+    background-color: #000;
+    color: white;
 }
 
 button {
-    background: #ffab00;
-    color: #000;
+    /* background: #ffab00; */
+    background-color: #000;
+    color: white;
     padding: 10px 25px;
     border-radius: 5px;
     font-size: 16px;
     font-weight: bold;
-    border: none;
+    border: 1px solid white;
     cursor: pointer;
 }
 
 button:hover {
-    background: #ff9100;
+    color: black;
+    /* background: #ff9100; */
+    background-color: white;
 }
 
 span output {
@@ -171,11 +193,12 @@ span output {
     width: 100%; 
     max-width: 2000px; 
     margin: 0 auto; 
-    padding: 20px; 
+    padding: 70px; 
     justify-content: space-between;
-    margin-top: 50px;
-    background-color: black;
+    color: #000;
+    background-color: white;
     text-align: center;
+    border: 1px solid #D3AF37;
 }
 
 .flex { 
