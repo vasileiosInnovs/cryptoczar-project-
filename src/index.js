@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     fetchCryptoData();
     initConverter();
-})
+    fetchCryptoNews();
+});
+
+setInterval(fetchCryptoData, 30000);
 
 function fetchCryptoData() {
     const url = "https://cryptoczar-project.onrender.com/crypto-data";
@@ -29,13 +32,12 @@ function fetchCryptoData() {
                 `;
 
                 tableBody.appendChild(row);
-            });
         })
         .catch(error => {
             console.error("Error fetching cryptocurrency data:", error);
         });
+    })
 }
-
 
 function initConverter() {
     const amountInput = document.getElementById("amount");
@@ -54,14 +56,14 @@ function initConverter() {
                     rates: data.rates
                 }));
         })
-            .then(data => {
-                populateCurrencyDropdowns(data.rates, data.vsCurrencies);
-                convertBtn.addEventListener("click", () => convertCurrency(amountInput, fromCrypto, toCurrency, resultDisplay));
-            })
-            .catch(error => {
-                console.error("Initialization error:", error);
-                resultDisplay.textContent = "Failed to load currency data. Please refresh the page.";
-            });
+                    .then(data => {
+                        populateCurrencyDropdowns(data.rates, data.vsCurrencies);
+                        convertBtn.addEventListener("click", () => convertCurrency(amountInput, fromCrypto, toCurrency, resultDisplay));
+                    })
+                    .catch(error => {
+                        console.error("Initialization error:", error);
+                        resultDisplay.textContent = "Failed to load currency data. Please refresh the page.";
+                    });
         }
     
     function populateCurrencyDropdowns(rates, vsCurrencies) {
@@ -143,51 +145,11 @@ function initConverter() {
                 resultDisplay.textContent = "An error occurred during conversion. Please try again.";
             });
     }
-    postButton.addEventListener("click", function () {
-        const userText = outputElement.textContent;
+    
 
-        if (!userText || userText.startsWith("❌") || userText.startsWith("🔄")) {
-            apiResponseDisplay.textContent = "No valid conversion result to post.";
-            return;
-        }
-
-        fetch(apiUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ result: userText })
-        })
-        .then(response => response.json())
-        .then(data => {
-            apiResponseDisplay.textContent = "✅ API Response: " + JSON.stringify(data);
-
-            // Append the posted data to a list on the page
-            const listItem = document.createElement("li");
-            listItem.textContent = ` Posted: ${userText} (${new Date().toLocaleString()})`;
-            resultList.appendChild(listItem);
-        })
-        .catch(error => {
-            console.error("Error posting data:", error);
-            apiResponseDisplay.textContent = " Failed to send data. Please check your connection and API settings.";
-        });
-    }); 
-  
-});
-
-
-
-
-const url = "https://newsapi.org/v2/everything?q=";
-const query = "bitcoin%20OR%20ethereum%20OR%20dogecoin%20OR%20solana%20OR%20tetherOR%20cryptocurrency&pageSize=10";
-
-document.addEventListener("DOMContentLoaded", () => {
-    fetchCryptoNews();
-});
-
-function reload() {
+/* function reload() {
     location.reload();
-}
+} */
 
 function fetchCryptoNews() {
     const url = "https://cryptoczar-project.onrender.com/crypto-news";

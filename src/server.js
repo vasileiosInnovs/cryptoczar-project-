@@ -26,7 +26,9 @@ server.listen(process.env.PORT || 5000, () => {
     const PORT = process.env.PORT || 5000;
     
     const app = express();
-    app.use(cors());
+    app.use(cors({
+        origin: ["http://127.0.0.1:5500", "https://vasileiosinnovs.github.io"]
+    }));
     app.use(express.json());
     
     const router = jsonServer.router("db.json");
