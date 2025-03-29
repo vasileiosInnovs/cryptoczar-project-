@@ -1,4 +1,7 @@
-
+document.addEventListener("DOMContentLoaded", function () {
+    fetchCryptoData();
+    initConverter();
+})
 
 function fetchCryptoData() {
     const url = "https://cryptoczar-project.onrender.com/crypto-data";
@@ -33,41 +36,34 @@ function fetchCryptoData() {
         });
 }
 
-fetchCryptoData();
-setInterval(fetchCryptoData, 30000);
 
-
-document.addEventListener("DOMContentLoaded", function () {
+function initConverter() {
     const amountInput = document.getElementById("amount");
     const fromCrypto = document.getElementById("fromCrypto");
     const toCurrency = document.getElementById("toCurrency");
     const convertBtn = document.getElementById("convert-currency");
     const resultDisplay = document.querySelector("#output output"); 
 
-    initConverter();
-
-    function initConverter() {
-        fetch('https://api.coingecko.com/api/v3/simple/supported_vs_currencies')
-            .then(response => response.json())
-            .then(vsCurrencies => {
-                return fetch('https://api.coingecko.com/api/v3/exchange_rates')
-                    .then(response => response.json())
-                    .then(data => ({
-                        vsCurrencies: vsCurrencies,
-                        rates: data.rates
-                    }));
-            })
+    fetch('https://cryptoczar-project.onrender.com/supported-currencies')
+        .then(response => response.json())
+        .then(vsCurrencies => {
+            return fetch('https://cryptoczar-project.onrender.com/exchange_rates')
+                .then(response => response.json())
+                .then(data => ({
+                    vsCurrencies: vsCurrencies,
+                    rates: data.rates
+                }));
+        })
             .then(data => {
                 populateCurrencyDropdowns(data.rates, data.vsCurrencies);
-                convertBtn.disabled = false;
-                convertBtn.addEventListener("click", convertCurrency);
+                convertBtn.addEventListener("click", () => convertCurrency(amountInput, fromCrypto, toCurrency, resultDisplay));
             })
             .catch(error => {
                 console.error("Initialization error:", error);
                 resultDisplay.textContent = "Failed to load currency data. Please refresh the page.";
             });
-    }
-
+        }
+    
     function populateCurrencyDropdowns(rates, vsCurrencies) {
         fromCrypto.innerHTML = '<option value="">Cryptocurrency</option>';
         toCurrency.innerHTML = '<option value="">Currency</option>';
@@ -98,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function convertCurrency() {
+    function convertCurrency(amountInput, fromCrypto, toCurrency, resultDisplay) {
         const amount = parseFloat(amountInput.value);
         const fromCurrencyId = fromCrypto.value;
         const toCurrencyCode = toCurrency.value;
@@ -115,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        fetch('https://api.coingecko.com/api/v3/exchange_rates')
+        fetch('https://cryptoczar-project.onrender.com/exchange_rates')
             .then(response => response.json())
             .then(data => {
                 const rates = data.rates;

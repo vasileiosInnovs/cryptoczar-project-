@@ -66,5 +66,24 @@ server.listen(process.env.PORT || 5000, () => {
         }
       });
       
-    app.listen(PORT, () => console.log(`Proxy running on port ${PORT}`));
+      app.get("/supported-currencies", async (req, res) => {
+        try {
+            const response = await axios.get("https://api.coingecko.com/api/v3/simple/supported_vs_currencies");
+            res.json(response.data);
+        } catch (error) {
+            res.status(500).json({ error: "Failed to fetch supported currencies" });
+        }
+    });
+ 
+    app.get("/exchange-rates", async (req, res) => {
+        try {
+            const response = await axios.get("https://api.coingecko.com/api/v3/exchange_rates");
+            res.json(response.data);
+        } catch (error) {
+            res.status(500).json({ error: "Failed to fetch exchange rates" });
+        }
+    });
+    
+    // Start the server
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     
