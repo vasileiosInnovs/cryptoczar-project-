@@ -1,7 +1,7 @@
 
 
 function fetchCryptoData() {
-    const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h&locale=en";
+    const url = "https://cryptoczar-project.onrender.com/crypto-data";
     
     fetch(url)
         .then(response => response.json()) 
@@ -185,15 +185,17 @@ document.addEventListener("DOMContentLoaded", function () {
 const url = "https://newsapi.org/v2/everything?q=";
 const query = "bitcoin%20OR%20ethereum%20OR%20dogecoin%20OR%20solana%20OR%20tetherOR%20cryptocurrency&pageSize=10";
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchCryptoNews(query);
+document.addEventListener("DOMContentLoaded", () => {
+    fetchCryptoNews();
 });
 
 function reload() {
     location.reload();
-} 
-function fetchCryptoNews(query) {
-    fetch("https://newsapi.org/v2/everything?q=bitcoin%20OR%20ethereum%20OR%20dogecoin%20OR%20solana%20OR%20tetherOR%20cryptocurrency&pageSize=10&apiKey=add4c8b134724a6d9ebd90930a86980b")
+}
+
+function fetchCryptoNews() {
+    const url = "https://cryptoczar-project.onrender.com/crypto-news";
+    fetch(url)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -204,43 +206,51 @@ function fetchCryptoNews(query) {
         .catch((error) => {
             console.error("Error fetching news:", error);
             const cardsContainer = document.getElementById("cards-container");
-            cardsContainer.innerHTML = "<p>Failed to load news. Please try again later.</p>";
+            cardsContainer.innerHTML =
+                "<p>🚨 Failed to load news. Please try again later.</p>";
         });
-
 }
+
 function bindData(articles) {
     const cardsContainer = document.getElementById("cards-container");
     const newsCardTemplate = document.getElementById("template-news-card");
     cardsContainer.innerHTML = "";
-    if (!articles || !Array.isArray(articles)) {
+
+    if (!articles || !Array.isArray(articles) || articles.length === 0) {
         console.error("No articles found or invalid data format");
-        cardsContainer.innerHTML = "<p>No news found. Please try again later.</p>";
+        cardsContainer.innerHTML = "<p>⚠️ No news found. Please try again later.</p>";
         return;
     }
+
     articles.forEach((article) => {
         if (!article.urlToImage) return;
         const cardClone = newsCardTemplate.content.cloneNode(true);
         fillDataInCard(cardClone, article);
         cardsContainer.appendChild(cardClone);
     });
-
 }
+
 function fillDataInCard(cardClone, article) {
     const newsImg = cardClone.querySelector("#news-img");
     const newsTitle = cardClone.querySelector("#news-title");
     const newsSource = cardClone.querySelector("#news-source");
     const newsDesc = cardClone.querySelector("#news-desc");
+
     newsImg.src = article.urlToImage;
     newsImg.alt = article.title || "News image";
     newsTitle.textContent = article.title;
     newsDesc.textContent = article.description || "No description available";
+
     const date = new Date(article.publishedAt).toLocaleString("en-US", {
         timeZone: "Europe/Moscow",
     });
+
     newsSource.textContent = `${article.source?.name || "Unknown source"} · ${date}`;
+
     cardClone.firstElementChild.addEventListener("click", () => {
         if (article.url) {
             window.open(article.url, "_blank");
         }
     });
-} 
+}
+ 
