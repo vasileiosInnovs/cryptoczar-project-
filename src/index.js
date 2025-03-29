@@ -39,6 +39,19 @@ function fetchCryptoData() {
     })
 }
 
+async function initConverter() {
+    try {
+        const response = await fetch("https://cryptoczar-project.onrender.com/supported-currencies");
+        if (!response.ok) throw new Error("Failed to load currencies");
+
+        const data = await response.json();
+        console.log("Supported Currencies:", data);
+    } catch (error) {
+        console.error("Initialization error:", error);
+    }
+}
+
+
 function initConverter() {
     const amountInput = document.getElementById("amount");
     const fromCrypto = document.getElementById("fromCrypto");
