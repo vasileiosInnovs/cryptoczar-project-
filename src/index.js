@@ -6,34 +6,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
 setInterval(fetchCryptoData, 30000);
 
-fetch(url)
-    .then(response => response.json()) 
-    .then(data => {
-        console.log("Crypto Data Response:", data); 
-        const tableBody = document.getElementById("cryptoTableBody");
-        tableBody.innerHTML = ""; 
+function fetchCryptoData() {
+    const url = "https://cryptoczar-project.onrender.com/crypto-data";
 
-        data.forEach(coin => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${coin.market_cap_rank}</td>
-                <td>
-                    <img src="${coin.image}" alt="${coin.name}"> ${coin.name} (${coin.symbol.toUpperCase()})
-                </td>
-                <td>$${coin.current_price.toLocaleString()}</td>
-                <td>$${coin.market_cap.toLocaleString()}</td>
-                <td>$${(coin.fully_diluted_valuation || "N/A").toLocaleString()}</td>
-                <td>$${coin.high_24h.toLocaleString()}</td>
-                <td>$${coin.low_24h.toLocaleString()}</td>
-                <td>${coin.total_supply ? coin.total_supply.toLocaleString() : "N/A"}</td>
-                <td>${coin.max_supply ? coin.max_supply.toLocaleString() : "N/A"}</td>
-            `;
-            tableBody.appendChild(row);
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById("cryptoTableBody");
+            tableBody.innerHTML = ""; 
+
+            data.forEach(coin => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${coin.market_cap_rank}</td>
+                    <td>
+                        <img src="${coin.image}" alt="${coin.name}"> ${coin.name} (${coin.symbol.toUpperCase()})
+                    </td>
+                    <td>$${coin.current_price.toLocaleString()}</td>
+                    <td>$${coin.market_cap.toLocaleString()}</td>
+                    <td>$${(coin.fully_diluted_valuation || "N/A").toLocaleString()}</td>
+                    <td>$${coin.high_24h.toLocaleString()}</td>
+                    <td>$${coin.low_24h.toLocaleString()}</td>
+                    <td>${coin.total_supply ? coin.total_supply.toLocaleString() : "N/A"}</td>
+                    <td>${coin.max_supply ? coin.max_supply.toLocaleString() : "N/A"}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching cryptocurrency data:", error);
         });
-    })
-    .catch(error => {
-        console.error("Error fetching cryptocurrency data:", error);
-    });
+}
+
 
 
 async function initConverter() {
