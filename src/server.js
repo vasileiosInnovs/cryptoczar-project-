@@ -48,7 +48,7 @@ server.listen(process.env.PORT || 5000, () => {
                 params: {
                     q: "bitcoin OR ethereum OR dogecoin OR solana OR tether OR cryptocurrency",
                     pageSize: 10,
-                    apiKey: API_KEY
+                    apiKey: add4c8b134724a6d9ebd90930a86980b
                 }
             });
             res.json(response.data);
@@ -77,15 +77,15 @@ server.listen(process.env.PORT || 5000, () => {
         }
     });
  
-    app.get("/exchange-rates", async (req, res) => {
+    app.get("/exchange_rates", async (req, res) => {
         try {
             const response = await axios.get("https://api.coingecko.com/api/v3/exchange_rates");
             res.json(response.data);
         } catch (error) {
+            console.error("Error fetching exchange rates:", error.message);
             res.status(500).json({ error: "Failed to fetch exchange rates" });
         }
-    });
+    });    
     
-    // Start the server
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     
