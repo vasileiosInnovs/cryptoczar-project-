@@ -27,7 +27,9 @@ server.listen(process.env.PORT || 5000, () => {
     
     const app = express();
     app.use(cors({
-        origin: ["http://127.0.0.1:5500", "https://vasileiosinnovs.github.io/cryptoczar-project-"]
+        origin: ["http://127.0.0.1:5500", "https://vasileiosinnovs.github.io/cryptoczar-project-"],
+        methods: ["GET", "POST"], 
+        allowedHeaders: ["Content-Type"]
     }));
     app.use(express.json());
     
