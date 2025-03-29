@@ -147,6 +147,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 resultDisplay.textContent = "An error occurred during conversion. Please try again.";
             });
     }
+    postButton.addEventListener("click", function () {
+        const userText = outputElement.textContent;
+
+        if (!userText || userText.startsWith("❌") || userText.startsWith("🔄")) {
+            apiResponseDisplay.textContent = "No valid conversion result to post.";
+            return;
+        }
+
+        fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ result: userText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            apiResponseDisplay.textContent = "✅ API Response: " + JSON.stringify(data);
+
+            // Append the posted data to a list on the page
+            const listItem = document.createElement("li");
+            listItem.textContent = ` Posted: ${userText} (${new Date().toLocaleString()})`;
+            resultList.appendChild(listItem);
+        })
+        .catch(error => {
+            console.error("Error posting data:", error);
+            apiResponseDisplay.textContent = " Failed to send data. Please check your connection and API settings.";
+        });
+    }); 
   
 });
 
@@ -164,7 +193,7 @@ function reload() {
     location.reload();
 } 
 function fetchCryptoNews(query) {
-    fetch(`${url}${query}&apiKey=add4c8b134724a6d9ebd90930a86980b`)
+    fetch("https://newsapi.org/v2/everything?q=bitcoin%20OR%20ethereum%20OR%20dogecoin%20OR%20solana%20OR%20tetherOR%20cryptocurrency&pageSize=10&apiKey=add4c8b134724a6d9ebd90930a86980b")
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -214,32 +243,4 @@ function fillDataInCard(cardClone, article) {
             window.open(article.url, "_blank");
         }
     });
-} /*  postButton.addEventListener("click", function () {
-        const userText = outputElement.textContent;
-
-        if (!userText || userText.startsWith("❌") || userText.startsWith("🔄")) {
-            apiResponseDisplay.textContent = "No valid conversion result to post.";
-            return;
-        }
-
-        fetch(apiUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ result: userText })
-        })
-        .then(response => response.json())
-        .then(data => {
-            apiResponseDisplay.textContent = "✅ API Response: " + JSON.stringify(data);
-
-            // Append the posted data to a list on the page
-            const listItem = document.createElement("li");
-            listItem.textContent = ` Posted: ${userText} (${new Date().toLocaleString()})`;
-            resultList.appendChild(listItem);
-        })
-        .catch(error => {
-            console.error("Error posting data:", error);
-            apiResponseDisplay.textContent = " Failed to send data. Please check your connection and API settings.";
-        });
-    }); solid gold- #FFCC11. metallic gold- #D3AF37  yellow- #FFC829.*/
+} 
