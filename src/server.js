@@ -40,7 +40,6 @@ server.listen(process.env.PORT || 5000, () => {
     
     app.use((req, res, next) => {
         res.header("Access-Control-Allow-Origin", "https://vasileiosinnovs.github.io/cryptoczar-project-/"); 
-        res.header("Access-Control-Allow-Headers", "*");
         next();
     });
     
@@ -50,7 +49,7 @@ server.listen(process.env.PORT || 5000, () => {
                 params: {
                     q: "bitcoin OR ethereum OR dogecoin OR solana OR tether OR cryptocurrency",
                     pageSize: 10,
-                    apiKey: add4c8b134724a6d9ebd90930a86980b
+                    apiKey: 'add4c8b134724a6d9ebd90930a86980b'
                 }
             });
             res.json(response.data);
