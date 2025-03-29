@@ -39,7 +39,7 @@ server.listen(process.env.PORT || 5000, () => {
     app.use("/api", router);
     
     app.use((req, res, next) => {
-        res.header("Access-Control-Allow-Origin", "https://vasileiosinnovs.github.io/cryptoczar-project-/"); 
+        res.header("Access-Control-Allow-Origin", "*"); 
         next();
     });
     
