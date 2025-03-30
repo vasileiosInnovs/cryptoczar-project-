@@ -1,21 +1,3 @@
-/* const jsonServer = require('json-server')
-
-const server = jsonServer.create()
-
-const router = jsonServer.router('db.json')
-const middlewares = jsonServer.defaults()
-
-server.use(middlewares)
-server.use('/api', router)
-server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://vasileiosinnovs.github.io/cryptoczar-project-/') // The URL you put here is for the web application that you have deployed using Github Pages
-    res.header('Access-Control-Allow-Headers', '*')
-    next()
-})
-server.listen(process.env.PORT || 5000, () => {
-    console.log('JSON Server is running')
-}) */
-
 require("dotenv").config();
 const jsonServer = require("json-server");
 const express = require("express");
@@ -52,35 +34,75 @@ app.get("/crypto-news", async (req, res) => {
         res.status(500).json({ error: "Error fetching news" });
     }
 });
+
+let cachedExchangeRates = null;
+let lastFetchTime = 0;
+let cachedCryptoData = null;
+let lastCryptoFetch = 0;
+const CACHE_TIME = 5 * 60 * 1000; 
+
+
 app.get("/crypto-data", async (req, res) => {
-    try {
-      const response = await axios.get("https://api.coingecko.com/api/v3/coins/markets", {
-        params: { vs_currency: "usd", order: "market_cap_desc", per_page: 10, page: 1 },
-      });
-      res.json(response.data);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch data" });
+    const now = Date.now();
+    if (cachedCryptoData && now - lastCryptoFetch < CACHE_TIME) {
+        console.log("Serving cached crypto data");
+        return res.json(cachedCryptoData);
     }
-  });
-  
-  app.get("/supported-currencies", async (req, res) => {
+
     try {
-        const response = await axios.get("https://api.coingecko.com/api/v3/simple/supported_vs_currencies");
+        console.log("Fetching fresh crypto data...");
+        const response = await axios.get("https://api.coingecko.com/api/v3/coins/markets", {
+            params: { vs_currency: "usd", order: "market_cap_desc", per_page: 10, page: 1 },
+        });
+
+        cachedCryptoData = response.data;
+        lastCryptoFetch = now;
         res.json(response.data);
     } catch (error) {
-        res.status(500).json({ error: "Failed to fetch supported currencies" });
+        console.error("Error fetching crypto data:", error.response?.data || error.message);
+        res.status(500).json({ error: "Failed to fetch crypto data" });
+    }
+});
+  
+app.get("/exchange_rates", async (req, res) => {
+    const now = Date.now();
+    if (cachedExchangeRates && now - lastRatesFetch < CACHE_TIME) {
+        console.log("Serving cached exchange rates");
+        return res.json(cachedExchangeRates);
+    }
+
+    try {
+        console.log("Fetching fresh exchange rates...");
+        const response = await axios.get("https://api.coingecko.com/api/v3/exchange_rates");
+
+        cachedExchangeRates = response.data;
+        lastRatesFetch = now;
+        res.json(response.data);
+    } catch (error) {
+        console.error("Error fetching exchange rates:", error.response?.data || error.message);
+        res.status(500).json({ error: "Failed to fetch exchange rates" });
     }
 });
 
 app.get("/exchange_rates", async (req, res) => {
+    const now = Date.now();
+    
+    if (cachedExchangeRates && now - lastFetchTime < CACHE_TIME) {
+        return res.json(cachedExchangeRates);
+    }
+
     try {
         const response = await axios.get("https://api.coingecko.com/api/v3/exchange_rates");
+        cachedExchangeRates = response.data;
+        lastFetchTime = now;
         res.json(response.data);
     } catch (error) {
         console.error("Error fetching exchange rates:", error.message);
         res.status(500).json({ error: "Failed to fetch exchange rates" });
     }
-});    
+});
+   
+console.log("API Key Loaded:", process.env.NEWS_API_KEY);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     
