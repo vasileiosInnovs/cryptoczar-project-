@@ -6,12 +6,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
 setInterval(fetchCryptoData, 30000);
 
+let lastCryptoData = null;
+let lastFetchTime = 0;
+
+async function fetchCryptoData() {
+    const now = Date.now();
+    if (lastCryptoData && now - lastFetchTime < 60000) {
+        console.log("Using cached crypto data");
+        return updateCryptoTable(lastCryptoData);
+    }
+
+    try {
+        const response = await fetchWithRetry("https://cryptoczar-project.onrender.com/crypto-data");
+        lastCryptoData = response;
+        lastFetchTime = Date.now();
+        updateCryptoTable(response);
+    } catch (error) {
+        console.error("Error fetching cryptocurrency data:", error);
+    }
+}
+
 function fetchCryptoData() {
     const url = "https://cryptoczar-project.onrender.com/crypto-data";
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
+            console.log("Fetched Crypto Data:", data);
+
             const tableBody = document.getElementById("cryptoTableBody");
             tableBody.innerHTML = ""; 
 
@@ -36,22 +58,27 @@ function fetchCryptoData() {
         .catch(error => {
             console.error("Error fetching cryptocurrency data:", error);
         });
-}
-
-
-
-async function initConverter() {
-    try {
-        const response = await fetch("https://cryptoczar-project.onrender.com/supported-currencies");
-        if (!response.ok) throw new Error("Failed to load currencies");
-
-        const data = await response.json();
-        console.log("Supported Currencies:", data);
-    } catch (error) {
-        console.error("Initialization error:", error);
     }
-}
 
+    async function fetchWithRetry(url, retries = 3, delay = 2000) {
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    if (response.status === 429 && attempt < retries) {
+                        console.warn(`Rate limited. Retrying in ${delay}ms...`);
+                        await new Promise(res => setTimeout(res, delay));
+                        continue;
+                    }
+                    throw new Error(`HTTP Error ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Attempt ${attempt} failed:`, error);
+            }
+        }
+        throw new Error(`Failed to fetch ${url} after ${retries} retries`);
+    }
 
 function initConverter() {
     const amountInput = document.getElementById("amount");
