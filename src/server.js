@@ -63,6 +63,20 @@ app.get("/crypto-data", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch crypto data" });
     }
 });
+
+app.get("/supported-currencies", async (req, res) => {
+    try {
+        console.log("Fetching supported currencies...");
+        const response = await axios.get("https://api.coingecko.com/api/v3/simple/supported_vs_currencies");
+        
+        console.log("Supported currencies received:", response.data);
+        res.json(response.data);
+    } catch (error) {
+        console.error("Error fetching supported currencies:", error.response?.data || error.message);
+        res.status(500).json({ error: "Failed to fetch supported currencies" });
+    }
+});
+
   
 app.get("/exchange_rates", async (req, res) => {
     const now = Date.now();
@@ -101,8 +115,6 @@ app.get("/exchange_rates", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch exchange rates" });
     }
 });
-   
-console.log("API Key Loaded:", process.env.NEWS_API_KEY);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     
