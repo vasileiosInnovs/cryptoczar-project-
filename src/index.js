@@ -87,7 +87,7 @@ function initConverter() {
     const convertBtn = document.getElementById("convert-currency");
     const resultDisplay = document.querySelector("#output output"); 
 
-    fetch('https://cryptoczar-project.onrender.com/supported-currencies')
+    /* fetch('https://cryptoczar-project.onrender.com/supported-currencies')
         .then(response => response.json())
         .then(vsCurrencies => {
             return fetch('https://cryptoczar-project.onrender.com/exchange_rates')
@@ -105,7 +105,41 @@ function initConverter() {
                         console.error("Initialization error:", error);
                         resultDisplay.textContent = "Failed to load currency data. Please refresh the page.";
                     });
-        }
+        } */
+
+    fetch('https://cryptoczar-project.onrender.com/supported-currencies')
+    .then(response => {
+        console.log("Supported currencies response:", response.status, response.statusText);
+        return response.json();
+    })
+    .then(vsCurrencies => {
+        console.log("Supported currencies data:", vsCurrencies); // Debugging
+
+        return fetch('https://cryptoczar-project.onrender.com/exchange_rates')
+            .then(response => {
+                console.log("Exchange rates response:", response.status, response.statusText);
+                return response.json();
+            })
+            .then(data => {
+                console.log("Exchange rates data:", data); // Debugging
+
+                return {
+                    vsCurrencies: vsCurrencies,
+                    rates: data.rates
+                };
+            });
+    })
+    .then(data => {
+        console.log("Final fetched data:", data); // Debugging
+        populateCurrencyDropdowns(data.rates, data.vsCurrencies);
+        convertBtn.addEventListener("click", () => convertCurrency(amountInput, fromCrypto, toCurrency, resultDisplay));
+    })
+    .catch(error => {
+        console.error("Initialization error:", error);
+        resultDisplay.textContent = "Failed to load currency data. Please refresh the page.";
+    });
+}
+
     
     function populateCurrencyDropdowns(rates, vsCurrencies) {
         fromCrypto.innerHTML = '<option value="">Cryptocurrency</option>';
